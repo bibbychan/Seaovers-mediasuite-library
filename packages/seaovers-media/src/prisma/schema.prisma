@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Countrycode {
+  countryName   String @id
+  alpha2code    String @map("alpha_2_code")
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("countrycode")
+}
+
 model Library {
   uid            String      @id // SO-A-XXXXXXXX
   vodTaskId      String      @unique @map("vod_task_id")
