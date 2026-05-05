@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Countrycode {
+  countryName   String @id
+  alpha2code    String @map("alpha_2_code")
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("countrycode")
+}
+
+model Library {
+  uid            String      @id // SO-A-XXXXXXXX
+  vodTaskId      String      @unique @map("vod_task_id")
+  houseId        String?     @map("house_id")
+  providerName   String?     @map("provider_name")
+  providerId     Int?        @map("provider_id")
+  filename       String?
+  orgTitle       String?     @map("org_title")
+  titleEnglish   String?     @map("title_english")
+  titleChinese   String?     @map("title_chinese")
+  season         String?
+  episode        String?
+  genre          String?
+  prodYear       Int?        @map("prod_year")
+  director       String?
+  cast           String?
+  country        String?
+  originalLanguage String?   @map("original_language")
+  imdbLink       String?     @map("imdb_link")
+  vendor         String?
+  svod           String?
+  avod           String?
+  fast           String?
+  payTv          String?     @map("pay_tv")
+  videoOrientation Int?      @map("video_orientation")
+  videoRatio     String?     @map("video_ratio")
+  isBurnIn       Boolean     @default(false) @map("is_burn_in")
+  srt            String?
+  thumbnailLand  String?     @map("thumbnail_land")
+  thumbnailPort  String?     @map("thumbnail_port")
+  thumbnailUrl   String?     @map("thumbnail_url")
+  posterPortrait String?     @map("poster_portrait")
+  posterUrl      String?     @map("poster_url")
+  duration       Int?
+  onshelfDate    DateTime?   @map("onshelf_date")
+  offshelfDate   DateTime?   @map("offshelf_date")
+  status         Int         @default(1)
+  updateDate     DateTime?   @map("update_date")
+  createDate     DateTime?   @map("create_date")
+
+  vodsources     Vodsources[]
+
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@map("library")
+}
+
+model Vodsources {
+  id              String   @id // UUID or provided ID
+  name            String
+  libraryUid      String?  @map("library_uid")
+  url             String
+  duration        Int?
+  broadpeakAssetId String? @map("broadpeak_asset_id")
+  providerId      Int?     @map("provider_id")
+  status         Int      @default(1)
+  onshelfDate    DateTime? @map("on_shelf_date")
+  offshelfDate   DateTime? @map("off_shelf_date")
+  quePoints       String?  @map("que_points")
+  metadata       String?
+  initMetadata    String?  @map("init_metadata")
+  region          String?
+  orientation    Int?
+  aiCuePoint      String?  @map("ai_cue_point")
+
+  library        Library?  @relation(fields: [libraryUid], references: [uid])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("vodsources")
+}
